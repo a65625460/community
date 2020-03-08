@@ -9,6 +9,7 @@ import life.majiang.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -43,6 +44,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
+        System.out.println(githubUser);
         if (githubUser != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -51,6 +53,7 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
             // 登录成功，写cookie 和session
             response.addCookie(new Cookie("token",token));
