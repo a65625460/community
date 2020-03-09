@@ -3,6 +3,7 @@ package life.majiang.community.mapper;
 import life.majiang.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public interface QuestionMapper {
     @Insert("INSERT INTO question (title,description,gmt_create,gmt_modified,creator,tag) VALUES (#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
     void create(Question question);
 
-    @Select("SELECT * FROM question")
-    List<Question> list();
+    @Select("SELECT * FROM question LIMIT #{offset},#{size}")
+    List<Question> list(@Param("offset") Integer offset, @Param("size")Integer size);
+
+    @Select("SELECT COUNT(1) FROM question")
+    Integer count();
 }
