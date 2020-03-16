@@ -10,6 +10,5 @@ create table question
 	view_count INT default 0,
 	like_count INT default 0,
 	tag VARCHAR(256),
-	constraint question_pk
-		primary key (id)
+	primary key (id)
 );

@@ -1,13 +1,14 @@
 package life.majiang.community.dto;
 
+import life.majiang.community.model.Notification;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PaginationDTO {
-    private List<QuestionDTO> questions;
+public class PaginationDTO<T> {
+    private List<T> data;
     // 上一页按钮
     private boolean showPrevious;
     // 首页按钮
