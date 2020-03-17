@@ -1,3 +1,3 @@
-alter table QUESTION alter column CREATOR BIGINT auto_increment;
+alter table question change creator creator BIGINT;
 
-alter table COMMENT alter column COMMENTATOR BIGINT auto_increment;
+alter table comment change commentator commentator BIGINT;
