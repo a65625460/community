@@ -37,7 +37,6 @@
                     <h4 class="media-heading">
                         <a th:href="'/question/' + ${question.id}" th:text="${question.title}"></a>
                     </h4>
-                    <span th:text="${question.description}">点击进入看 小匠 录制的视频</span><br/>
                     <span class="text-desc"><span th:text="${question.commentCount}">0</span> 个回复 • <span th:text="${question.viewCount}">9</span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm ')}"></span></span>
                 </div>
             </div>
@@ -46,29 +45,29 @@
                 <ul class="pagination">
 
                     <li th:if="${pagination.showFirstPage}">
-                        <a th:href="'/?page=1'" aria-label="Previous">
+                        <a th:href="'/?page=1' + ${search == null ? '' : '&search=' + search}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
 
                     <li th:if="${pagination.showPrevious}">
-                        <a th:href="'/?page=' + ${pagination.page - 1}" aria-label="Previous">
+                        <a th:href="'/?page=' + ${pagination.page - 1} + ${search == null ? '' : '&search=' + search}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
 
                     <li th:each="page : ${pagination.pages}" th:class="${pagination.page == page} ? 'active' : ''">
-                        <a th:text="${page}" th:href="'/?page=' + ${page}"></a>
+                        <a th:text="${page}" th:href="'/?page=' + ${page} + ${search == null ? '' : '&search=' + search}"></a>
                     </li>
 
                     <li th:if="${pagination.showNext}">
-                        <a th:href="'/?page=' + ${pagination.page + 1}" aria-label="Next">
+                        <a th:href="'/?page=' + ${pagination.page + 1} + ${search == null ? '' : '&search=' + search}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
 
                     <li th:if="${pagination.showEndPage}">
-                        <a th:href="'/?page=' + ${pagination.totalPage}" aria-label="Next">
+                        <a th:href="'/?page=' + ${pagination.totalPage} + ${search == null ? '' : '&search=' + search}" aria-label="Next">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>
@@ -76,10 +75,14 @@
             </nav>
 
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>推荐内容</h4>
+                <img class="img-thumbnail question-wechat" src="/images/springmvc.png">
+            </div>
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package life.majiang.community.service;
 
 import life.majiang.community.dto.PaginationDTO;
 import life.majiang.community.dto.QuestionDTO;
+import life.majiang.community.dto.QuestionQueryDTO;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.QuestionExtMapper;
@@ -33,13 +34,24 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search, Integer page, Integer size) {
+
+        if(StringUtils.isNotBlank(search)){
+            String[] tags = StringUtils.split(search, " ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
 
         Integer offset = size * (page - 1);
 
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setPage(offset);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
 
         List<QuestionDTO>  questionDTOList = new ArrayList<>();
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO();
@@ -51,7 +63,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         paginationDTO.setData(questionDTOList);
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+
         paginationDTO.setPagination(totalCount, page, size);
 
 
